@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String @db.VarChar(255)
+
+  doctorNote   DoctorNote? @relation(fields: [doctorNoteId], references: [id], onDelete: Cascade)
+  doctorNoteId Int?        @map("doctor_note_id")
+
+  healthRecord   HealthRecord? @relation(fields: [healthRecordId], references: [id], onDelete: Cascade)
+  healthRecordId Int?          @map("health_record_id")
+}
+
+model Doctor {
+  id             Int    @id @default(autoincrement())
+  username       String @unique
+  password       String @db.VarChar(255)
+  specialization String @db.VarChar(255)
+
+  doctorNote   DoctorNote? @relation(fields: [doctorNoteId], references: [id])
+  doctorNoteId Int?        @map("doctor_note_id")
+}
+
+model DoctorNote {
+  id       Int      @id @default(autoincrement())
+  note     String   @db.VarChar(255)
+  createAt DateTime @default(now()) @map("create_at") @db.Timestamp(6)
+
+  user   User[]
+  doctor Doctor[]
+
+  @@map("doctor_note")
+}
+
+model HealthRecord {
+  id    Int    @id @default(autoincrement())
+  type  String @db.VarChar(255)
+  value String @db.VarChar(255)
+
+  date DateTime @default(now()) @db.Timestamp(6)
+
+  user User[]
+
+  @@map("health_record")
+}
