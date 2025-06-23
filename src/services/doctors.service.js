@@ -27,7 +27,7 @@ doctorService.updateUsernameSpecialization = async ({id, username,specialization
   })
 
   if(!existingUser) return null
- 
+
   return prisma.doctor.update({
     where: {
       id: Number(id)

@@ -15,40 +15,43 @@ doctorNoteService.createDoctorNote = (data) => {
   })
 }
 
-doctorNoteService.getAllDoctorNote = () => {
+doctorNoteService.getAllDoctorNote = (doctorId) => {
   return prisma.doctorNote.findMany({
     where: {
+      doctorId: Number(doctorId),
       isDeleted: false
     }
   })
 }
 
-doctorNoteService.getDoctorNoteById = async ({ noteId, doctorId }) => {
-  return prisma.doctorNote.findFirst({
+doctorNoteService.getDoctorNoteById = async ({ doctorId, userId }) => {
+  return prisma.doctorNote.findMany({
     where: {
-      id: Number(noteId),
-      userId: Number(doctorId),
+      userId: Number(userId),
+      doctorId: Number(doctorId),
       isDeleted: false
+    },
+    orderBy: {
+      createAt: 'desc'
     }
   })
 }
 
-doctorNoteService.getDoctorNoteReceived = async ({ noteId, userId }) => {
-  return prisma.doctorNote.findFirst({
+doctorNoteService.getDoctorNoteReceived = async ({ userId }) => {
+  return prisma.doctorNote.findMany({
     where: {
-      id: Number(noteId),
       userId: Number(userId),
       isDeleted: false
     }
   })
 }
 
-doctorNoteService.updateDoctorNoteById = async ({ noteId, note, userId, doctorId }) => {
+doctorNoteService.updateDoctorNoteById = async ({ noteId, note, doctorId }) => {
   const existingNote = await prisma.doctorNote.findFirst({
     where: {
       id: Number(noteId),
-      userId: Number(userId),
       doctorId: Number(doctorId),
+      isDeleted: false
     }
   })
 
@@ -69,11 +72,10 @@ doctorNoteService.updateDoctorNoteById = async ({ noteId, note, userId, doctorId
   })
 }
 
-doctorNoteService.deleteDoctorNoteById = async ({ noteId, userId , doctorId}) => {
+doctorNoteService.deleteDoctorNoteById = async ({ noteId, doctorId }) => {
   const existingNote = await prisma.doctorNote.findFirst({
     where: {
       id: Number(noteId),
-      userId: Number(userId),
       doctorId: Number(doctorId),
       isDeleted: false
     }
@@ -87,7 +89,7 @@ doctorNoteService.deleteDoctorNoteById = async ({ noteId, userId , doctorId}) =>
     },
     data: { isDeleted: true }
   })
-    return true
+  return true
 }
 
 export default doctorNoteService
