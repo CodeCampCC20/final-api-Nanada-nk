@@ -6,6 +6,19 @@ doctorService.getAllDoctor = () => {
   return prisma.doctor.findMany({})
 }
 
+doctorService.getDoctorById = (id) => {
+  return prisma.doctor.findUnique({
+    where: {
+      id: Number(id)
+    },
+    select: {
+      id: true,
+      username: true,
+      specialization: true
+    }
+  })
+}
+
 doctorService.updateUsernameSpecialization = async ({id, username,specialization}) => {
   const existingUser = await prisma.doctor.findFirst({
     where: {
@@ -14,7 +27,7 @@ doctorService.updateUsernameSpecialization = async ({id, username,specialization
   })
 
   if(!existingUser) return null
-
+ 
   return prisma.doctor.update({
     where: {
       id: Number(id)

@@ -9,7 +9,7 @@ const authenticate = async (req,res,next) => {
     console.log('authHeader', authHeader)
 
     if(!authHeader || !authHeader.startsWith("Bearer ")) {
-      createError(401,"Authentication required")
+      throw createError(401,"Authentication required")
     }
 
     const token = authHeader.split(" ")[1]

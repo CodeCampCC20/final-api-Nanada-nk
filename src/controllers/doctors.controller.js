@@ -5,8 +5,12 @@ const doctorController = {}
 
 doctorController.getMe = async (req, res, next) => {
   try {
-    const doctor = await doctorService.getAllDoctor
+    const id = Number(req.user.id)
+
+    const doctor = await doctorService.getDoctorById(id)
     console.log('doctor', doctor)
+
+    if (!doctor) return res.status(404).json({ success: false, message: "Resource not found" })
 
     res.status(200).json({ success: true, doctor })
 

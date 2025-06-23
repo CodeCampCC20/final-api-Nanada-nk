@@ -13,11 +13,8 @@ model User {
   username String @unique
   password String @db.VarChar(255)
 
-  doctorNote   DoctorNote? @relation(fields: [doctorNoteId], references: [id], onDelete: Cascade)
-  doctorNoteId Int?        @map("doctor_note_id")
-
-  healthRecord   HealthRecord? @relation(fields: [healthRecordId], references: [id], onDelete: Cascade)
-  healthRecordId Int?          @map("health_record_id")
+  doctorNotes   DoctorNote[]
+  healthRecords HealthRecord[]
 }
 
 model Doctor {
@@ -26,8 +23,7 @@ model Doctor {
   password       String @db.VarChar(255)
   specialization String @db.VarChar(255)
 
-  doctorNote   DoctorNote? @relation(fields: [doctorNoteId], references: [id])
-  doctorNoteId Int?        @map("doctor_note_id")
+  doctorNotes DoctorNote[]
 }
 
 model DoctorNote {
@@ -35,8 +31,11 @@ model DoctorNote {
   note     String   @db.VarChar(255)
   createAt DateTime @default(now()) @map("create_at") @db.Timestamp(6)
 
-  user   User[]
-  doctor Doctor[]
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?  @map("user_id")
+
+  doctor   Doctor? @relation(fields: [doctorId], references: [id])
+  doctorId Int?    @map("doctor_id")
 
   @@map("doctor_note")
 }
@@ -48,7 +47,8 @@ model HealthRecord {
 
   date DateTime @default(now()) @db.Timestamp(6)
 
-  user User[]
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?  @map("user_id")
 
   @@map("health_record")
 }
