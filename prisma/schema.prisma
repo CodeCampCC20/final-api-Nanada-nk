@@ -38,6 +38,8 @@ model DoctorNote {
   doctorId Int?    @map("doctor_id")
 
   @@map("doctor_note")
+
+  isDeleted Boolean @default(false)
 }
 
 model HealthRecord {
@@ -51,4 +53,6 @@ model HealthRecord {
   userId Int?  @map("user_id")
 
   @@map("health_record")
+
+  isDeleted Boolean @default(false)
 }
