@@ -19,7 +19,7 @@ const authenticateDoctor = async (req,res,next) => {
       createError(401,"Authentication required")
     }
 
-    const payload = jwtService.verifyToken(token)
+    const payload = jwtService.verifyTokenDoctor(token)
     console.log('payload', payload)
 
     if(!payload.id) {

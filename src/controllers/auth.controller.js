@@ -116,7 +116,7 @@ authController.loginDoctor = async (req, res, next) => {
     const payload = { id: existUser.id }
     console.log('payload', payload)
 
-    const accessToken = jwtService.createToken(payload)
+    const accessToken = jwtService.createTokenDoctor(payload)
     console.log('accessToken', accessToken)
 
     res.status(200).json({ success: true, accessToken })
